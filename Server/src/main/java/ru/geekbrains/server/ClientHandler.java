@@ -57,14 +57,17 @@ public class ClientHandler {
                         }
 
                         if (msg.startsWith("/w user1")) {
+                            String name = msg.split(" ")[1];
                             msg = msg.substring(9);
-                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, "user1");
+                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, name);
                         }else if (msg.startsWith("/w user2")){
+                            String name = msg.split(" ")[1];
                             msg = msg.substring(9);
-                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, "user2");
+                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, name);
                         }else if (msg.startsWith("/w user3")){
+                            String name = msg.split(" ")[1];
                             msg = msg.substring(9);
-                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, "user3");
+                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, name);
                         }
 
 
