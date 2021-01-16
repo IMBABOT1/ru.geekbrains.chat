@@ -49,6 +49,7 @@ public class Controller implements Initializable {
                             });
                         }finally {
                             network.close();
+                            Platform.exit();
                         }
                     }
                 }).start();
