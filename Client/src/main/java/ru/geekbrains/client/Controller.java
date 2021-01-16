@@ -4,10 +4,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,18 +20,45 @@ public class Controller implements Initializable {
     TextArea textArea;
 
     @FXML
-    TextField msgField;
+    TextField msgField, loginField;
+
+    @FXML
+    PasswordField passwordField;
+
+    @FXML
+    HBox loginBox;
 
     private Network network;
+    private boolean authenticated;
+    private String nickname;
+
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+        loginBox.setVisible(!authenticated);
+        loginBox.setManaged(!authenticated);
+        msgField.setVisible(authenticated);
+        msgField.setManaged(authenticated);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
              try {
+                 setAuthenticated(false);
                  network = new Network(8189);
-                new Thread(new Runnable() {
+                Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
+                            while (true) {
+                                String msg = network.readMsg();
+                                if (msg.startsWith("/authok ")){
+                                   nickname = msg.split(" ")[1];
+                                   setAuthenticated(true);
+                                   break;
+                                }
+                                textArea.appendText(msg + "\n");
+                            }
                             while (true) {
                                 String msg = network.readMsg();
                                 if (msg.equals("end_confirm")){
@@ -52,7 +77,9 @@ public class Controller implements Initializable {
                             Platform.exit();
                         }
                     }
-                }).start();
+                });
+                t.setDaemon(true);
+                t.start();
         }catch (IOException e){
             throw new RuntimeException("Невозможно подключиться к серверу");
         }
@@ -66,6 +93,17 @@ public class Controller implements Initializable {
                 msgField.clear();
                 msgField.requestFocus();
             }
+        }catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Не удалось подключиться к серверу", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    public void tryToAuth(ActionEvent actionEvent) {
+        try {
+            network.sendMst("/auth " + loginField.getText() + " " + passwordField.getText());
+            loginField.clear();
+            passwordField.clear();
         }catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.WARNING, "Не удалось подключиться к серверу", ButtonType.OK);
             alert.showAndWait();
