@@ -46,6 +46,7 @@ public class Server {
     }
 
 
+
     public boolean isNickBusy(String nick) {
         for (ClientHandler o : clients) {
             if (o.getNickName().equals(nick)) {

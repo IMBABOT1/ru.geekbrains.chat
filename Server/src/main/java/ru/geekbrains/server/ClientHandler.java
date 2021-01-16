@@ -64,18 +64,6 @@ public class ClientHandler {
                             msg = msg.replaceAll(name, "");
                             msg = msg.replaceAll("  ", " ");
                             server.unicastMesage(nickName + ": " + "wisp" + msg, name);
-                        }else if (msg.startsWith("/w " + temp)){
-                            String name = msg.split(" ")[1];
-                            msg = msg.replaceAll("/w", "");
-                            msg = msg.replaceAll(name, "");
-                            msg = msg.replaceAll("  ", " ");
-                            server.unicastMesage(nickName + ": " + "wisp" + msg, name);
-                        }else if (msg.startsWith("/w " + temp)){
-                            String name = msg.split(" ")[1];
-                            msg = msg.replaceAll("/w", "");
-                            msg = msg.replaceAll(name, "");
-                            msg = msg.replaceAll("  ", " ");
-                            server.unicastMesage(nickName + ": " + "wisp" + msg, name);
                         }
 
 
