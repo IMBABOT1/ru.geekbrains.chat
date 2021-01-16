@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -25,10 +26,13 @@ public class Controller implements Initializable {
     TextField msgField;
 
     private Network network;
+    private Main main;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
              try {
+                 main = new Main();
                  network = new Network(8189);
                 new Thread(new Runnable() {
                     @Override
@@ -58,12 +62,21 @@ public class Controller implements Initializable {
         try {
             if (msgField.getText().trim().length() > 0) {
                 network.sendMst(msgField.getText());
+                closeConnection();
                 msgField.clear();
                 msgField.requestFocus();
             }
         }catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.WARNING, "Не удалось подключиться к серверу", ButtonType.OK);
             alert.showAndWait();
+        }
+    }
+
+    private void closeConnection(){
+        if (msgField.getText().equals("/end")){
+            network.close();
+            main.exitApplication();
+
         }
     }
 }
