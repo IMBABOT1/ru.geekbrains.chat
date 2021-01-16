@@ -56,13 +56,9 @@ public class ClientHandler {
                             sendMsg("end_confirm");
                             break;
                         }
-                            String temp = msg.split(" ")[1];
-                        System.out.println(temp);
+                        String temp = msg.split(" ")[1];
                         if (msg.startsWith("/w " + temp)) {
                             String name = msg.split(" ")[1];
-                            msg = msg.replaceAll("/w", "");
-                            msg = msg.replaceAll(name, "");
-                            msg = msg.replaceAll("  ", " ");
                             server.unicastMesage(nickName + ": " + "wisp" + msg, name);
                         }
 
