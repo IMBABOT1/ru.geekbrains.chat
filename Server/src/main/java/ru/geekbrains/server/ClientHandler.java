@@ -56,20 +56,21 @@ public class ClientHandler {
                             sendMsg("end_confirm");
                             break;
                         }
-
-                        if (msg.startsWith("/w user1")) {
+                            String temp = msg.split(" ")[1];
+                        System.out.println(temp);
+                        if (msg.startsWith("/w " + temp)) {
                             String name = msg.split(" ")[1];
                             msg = msg.replaceAll("/w", "");
                             msg = msg.replaceAll(name, "");
                             msg = msg.replaceAll("  ", " ");
                             server.unicastMesage(nickName + ": " + "wisp" + msg, name);
-                        }else if (msg.startsWith("/w user2")){
+                        }else if (msg.startsWith("/w " + temp)){
                             String name = msg.split(" ")[1];
                             msg = msg.replaceAll("/w", "");
                             msg = msg.replaceAll(name, "");
                             msg = msg.replaceAll("  ", " ");
                             server.unicastMesage(nickName + ": " + "wisp" + msg, name);
-                        }else if (msg.startsWith("/w user3")){
+                        }else if (msg.startsWith("/w " + temp)){
                             String name = msg.split(" ")[1];
                             msg = msg.replaceAll("/w", "");
                             msg = msg.replaceAll(name, "");
