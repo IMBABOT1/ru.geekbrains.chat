@@ -19,9 +19,16 @@ public class MainApp {
            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
            while (true){
                String msg = in.readUTF();
+               if (msg.equals("/end")){
+                   out.writeUTF("end_confirm");
+                   break;
+               }
                System.out.println("Client send: " + msg);
                out.writeUTF("Echo: " + msg);
            }
+           in.close();
+           out.close();
+           socket.close();
        }catch (IOException e){
            e.printStackTrace();
        }

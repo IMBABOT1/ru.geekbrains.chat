@@ -36,6 +36,10 @@ public class Controller implements Initializable {
                         try {
                             while (true) {
                                 String msg = network.readMsg();
+                                if (msg.equals("end_confirm")){
+                                    textArea.appendText("Сервер прекратил работу");
+                                    break;
+                                }
                                 textArea.appendText(msg + "\n");
                             }
                         }catch (IOException e){
