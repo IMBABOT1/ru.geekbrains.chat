@@ -39,7 +39,7 @@ public class ClientHandler {
                             nickName = nickFromAuthManager;
                             server.subscribe(this);
                             sendMsg("/authok " + nickName);
-                            sendMsg(nickName + " зашел в чат");
+                            server.broadcastMsg(nickName + " " + "зашел в чат" + "\n");
                             break;
                         }else {
                             sendMsg("Указан неверный логин/пароль");
@@ -51,12 +51,22 @@ public class ClientHandler {
                     System.out.println("Сообщение от клиента: " + msg + "\n");
                     if (msg.startsWith("/")){
                         if (msg.equals("/end")){
+                            server.broadcastMsg(nickName + " " + "вышел из чата" + "\n");
                             sendMsg("end_confirm");
                             break;
                         }
-                        if (msg.equals("/w" + " " + nickName)){
-                            server.unicast(msg, nickName);
+
+                        if (msg.startsWith("/w user1")) {
+                            msg = msg.substring(9);
+                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, "user1");
+                        }else if (msg.startsWith("/w user2")){
+                            msg = msg.substring(9);
+                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, "user2");
+                        }else if (msg.startsWith("/w user3")){
+                            msg = msg.substring(9);
+                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, "user3");
                         }
+
 
                     }else {
                         server.broadcastMsg(nickName + ": " + msg);
@@ -107,4 +117,6 @@ public class ClientHandler {
             }
         }
     }
+
 }
+

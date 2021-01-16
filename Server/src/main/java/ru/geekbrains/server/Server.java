@@ -31,36 +31,35 @@ public class Server {
         }
     }
 
-    public void broadcastMsg(String msg){
-        for (ClientHandler o : clients){
+    public void broadcastMsg(String msg) {
+        for (ClientHandler o : clients) {
             o.sendMsg(msg);
         }
     }
 
-    public void unicast(String msg, String nick){
+    public void unicastMesage(String msg, String name){
         for (ClientHandler o : clients){
-            if (o.getNickName().equals(nick)){
-                o.getNickName();
+            if (o.getNickName().equals(name)){
+                o.sendMsg(msg);
             }
         }
     }
 
 
-
-    public boolean isNickBusy(String nick){
-        for (ClientHandler o : clients){
-            if (o.getNickName().equals(nick)){
+    public boolean isNickBusy(String nick) {
+        for (ClientHandler o : clients) {
+            if (o.getNickName().equals(nick)) {
                 return true;
             }
         }
         return false;
     }
 
-    public synchronized void  subscribe(ClientHandler clientHandler){
+    public synchronized void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
     }
 
-    public synchronized void unsubscribe(ClientHandler clientHandler){
+    public synchronized void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
     }
 
