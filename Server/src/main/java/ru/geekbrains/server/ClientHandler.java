@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Locale;
 
 public class ClientHandler {
 
@@ -58,16 +59,22 @@ public class ClientHandler {
 
                         if (msg.startsWith("/w user1")) {
                             String name = msg.split(" ")[1];
-                            msg = msg.substring(9);
-                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, name);
+                            msg = msg.replaceAll("/w", "");
+                            msg = msg.replaceAll(name, "");
+                            msg = msg.replaceAll("  ", " ");
+                            server.unicastMesage(nickName + ": " + "wisp" + msg, name);
                         }else if (msg.startsWith("/w user2")){
                             String name = msg.split(" ")[1];
-                            msg = msg.substring(9);
-                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, name);
+                            msg = msg.replaceAll("/w", "");
+                            msg = msg.replaceAll(name, "");
+                            msg = msg.replaceAll("  ", " ");
+                            server.unicastMesage(nickName + ": " + "wisp" + msg, name);
                         }else if (msg.startsWith("/w user3")){
                             String name = msg.split(" ")[1];
-                            msg = msg.substring(9);
-                            server.unicastMesage(nickName + " " + "wisp" + " " + msg, name);
+                            msg = msg.replaceAll("/w", "");
+                            msg = msg.replaceAll(name, "");
+                            msg = msg.replaceAll("  ", " ");
+                            server.unicastMesage(nickName + ": " + "wisp" + msg, name);
                         }
 
 
