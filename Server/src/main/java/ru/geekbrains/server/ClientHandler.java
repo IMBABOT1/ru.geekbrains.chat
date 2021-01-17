@@ -57,7 +57,6 @@ public class ClientHandler {
                             break;
                         }
                         String temp = msg.split(" ")[1];
-                        System.out.println(temp);
                         if (msg.startsWith("/w " + temp)) {
                             String name = msg.split(" ")[1];
                             msg = msg.replaceAll("/w", "");

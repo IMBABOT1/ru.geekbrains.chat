@@ -10,8 +10,8 @@
 <?import javafx.scene.control.PasswordField?>
 <VBox fx:controller="ru.geekbrains.client.Controller" xmlns:fx="http://javafx.com/fxml">
     <HBox fx:id="loginBox">
-        <TextField fx:id="loginField" HBox.hgrow="ALWAYS"/>
-        <PasswordField fx:id="passwordField" HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="loginField" promptText="login" HBox.hgrow="ALWAYS"/>
+        <PasswordField fx:id="passwordField" promptText="password" HBox.hgrow="ALWAYS"/>
         <Button HBox.hgrow="ALWAYS" text="Войти" onAction="#tryToAuth"/>
     </HBox>
 
