@@ -3,6 +3,8 @@ package ru.geekbrains.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class Server {
     }
 
     private AuthManager authManager;
-
+    private final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Server(int port) {
         clients = new ArrayList<>();
@@ -32,6 +34,8 @@ public class Server {
     }
 
     public void broadcastMsg(String msg) {
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        msg = String.format("[%s]%s", LocalDateTime.now().format(DTF), msg);
         for (ClientHandler o : clients) {
             o.sendMsg(msg);
         }
