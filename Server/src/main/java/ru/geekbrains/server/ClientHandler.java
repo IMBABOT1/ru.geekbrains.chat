@@ -57,9 +57,14 @@ public class ClientHandler {
                             break;
                         }
                         String temp = msg.split(" ")[1];
+                        System.out.println(temp);
                         if (msg.startsWith("/w " + temp)) {
                             String name = msg.split(" ")[1];
-                            server.unicastMesage(nickName + ": " + "wisp" + msg, name);
+                            msg = msg.replaceAll("/w", "");
+                            msg = msg.replaceAll(name, "");
+                            msg = msg.replaceAll("  ", " ");
+                            server.unicastMesage(nickName + " " + "wisp:" + msg, name);
+                            server.unicastMesage(nickName +  "" + " wisp to " + name + ":" + " " + msg,  nickName);
                         }
 
 
