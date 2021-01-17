@@ -2,9 +2,11 @@ package ru.geekbrains.client;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.io.DataInputStream;
@@ -28,6 +30,9 @@ public class Controller implements Initializable {
     @FXML
     HBox loginBox;
 
+    @FXML
+    ListView clientsList;
+
     private Network network;
     private boolean authenticated;
     private String nickname;
@@ -39,49 +44,86 @@ public class Controller implements Initializable {
         loginBox.setManaged(!authenticated);
         msgField.setVisible(authenticated);
         msgField.setManaged(authenticated);
+        clientsList.setVisible(authenticated);
+        clientsList.setManaged(authenticated);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-             try {
-                 setAuthenticated(false);
-                 network = new Network(8189);
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            while (true) {
-                                String msg = network.readMsg();
-                                if (msg.startsWith("/authok ")){
-                                   nickname = msg.split(" ")[1];
-                                   setAuthenticated(true);
-                                   break;
-                                }
-                                textArea.appendText(msg + "\n");
+        setAuthenticated(false);
+        clientsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() == 2){
+                    msgField.setText("/w " + clientsList.getSelectionModel().getSelectedItem() + " ");
+                    msgField.requestFocus();
+                    msgField.selectEnd();
+
+                }
+            }
+        });
+    }
+
+    public void tryToConnect(){
+        try {
+            if (network != null && network.isConnected()){
+                return;
+            }
+            setAuthenticated(false);
+            network = new Network(8189);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (true) {
+                            String msg = network.readMsg();
+                            if (msg.startsWith("/authok ")){
+                                nickname = msg.split(" ")[1];
+                                setAuthenticated(true);
+                                break;
                             }
-                            while (true) {
-                                String msg = network.readMsg();
-                                if (msg.equals("end_confirm")){
+                            textArea.appendText(msg + "\n");
+                        }
+                        while (true) {
+                            String msg = network.readMsg();
+                            if (msg.startsWith("/")) {
+                                if (msg.equals("end_confirm")) {
                                     textArea.appendText("Сервер прекратил работу");
                                     break;
                                 }
+                                if (msg.startsWith("/clients_list ")) {
+                                    Platform.runLater(() -> {
+                                        clientsList.getItems().clear();
+                                        String[] tokens = msg.split(" ");
+                                        for (int i = 1; i < tokens.length; i++) {
+                                            clientsList.getItems().add(tokens[i]);
+                                        }
+                                    });
+                                }
+                            }else {
                                 textArea.appendText(msg + "\n");
                             }
-                        }catch (IOException e){
-                            Platform.runLater(()-> {
-                                Alert alert = new Alert(Alert.AlertType.WARNING, "Соединение с сервером разорванно", ButtonType.OK);
-                                alert.showAndWait();
-                            });
-                        }finally {
-                            network.close();
-                            Platform.exit();
                         }
+                    }catch (IOException e){
+                        Platform.runLater(()-> {
+                            Alert alert = new Alert(Alert.AlertType.WARNING, "Соединение с сервером разорванно", ButtonType.OK);
+                            alert.showAndWait();
+                        });
+                    }finally {
+                        network.close();
+                        setAuthenticated(false);
+                        nickname = null;
+                       // textArea.clear();
                     }
-                });
-                t.setDaemon(true);
-                t.start();
+                }
+            });
+            t.setDaemon(true);
+            t.start();
         }catch (IOException e){
-            throw new RuntimeException("Невозможно подключиться к серверу");
+            Platform.runLater(()-> {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Невозможно подключиться к серверу", ButtonType.OK);
+                alert.showAndWait();
+            });
         }
     }
 
@@ -101,6 +143,7 @@ public class Controller implements Initializable {
 
     public void tryToAuth(ActionEvent actionEvent) {
         try {
+            tryToConnect();
             network.sendMst("/auth " + loginField.getText() + " " + passwordField.getText());
             loginField.clear();
             passwordField.clear();

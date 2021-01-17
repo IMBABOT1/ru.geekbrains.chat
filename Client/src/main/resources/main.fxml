@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ListView?>
 <VBox fx:controller="ru.geekbrains.client.Controller" xmlns:fx="http://javafx.com/fxml">
     <HBox fx:id="loginBox">
         <TextField fx:id="loginField" promptText="login" HBox.hgrow="ALWAYS">
@@ -27,12 +28,14 @@
             </font>
         </Button>
     </HBox>
-
-    <TextArea fx:id="textArea" VBox.vgrow="ALWAYS" editable="false">
-        <font>
-            <Font name="System" size="16"/>
-        </font>
-    </TextArea>
+    <HBox VBox.vgrow="ALWAYS">
+        <TextArea fx:id="textArea" editable="false" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="System" size="16"/>
+            </font>
+        </TextArea>
+        <ListView fx:id="clientsList" maxWidth="200" minWidth="200"/>
+    </HBox>
 
     <TextField fx:id="msgField" onAction="#sendMsg">
         <font>

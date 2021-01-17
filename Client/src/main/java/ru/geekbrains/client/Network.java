@@ -22,6 +22,13 @@ public class Network {
         out.writeUTF(msg);
     }
 
+    public boolean isConnected(){
+        if (socket == null || socket.isClosed()){
+            return false;
+        }
+        return true;
+    }
+
     public String readMsg() throws IOException {
         return in.readUTF();
     }

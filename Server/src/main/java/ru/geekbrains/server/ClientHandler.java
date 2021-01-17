@@ -12,7 +12,18 @@ public class ClientHandler {
     private DataInputStream in;
     private DataOutputStream out;
     private Server server;
+
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     private String nickName;
+
+
+
+    private String newNick;
+
 
     public String getNickName() {
         return nickName;
@@ -38,9 +49,9 @@ public class ClientHandler {
                                 continue;
                             }
                             nickName = nickFromAuthManager;
-                            server.subscribe(this);
                             sendMsg("/authok " + nickName);
-                            server.broadcastMsg(nickName + " " + "зашел в чат" + "\n");
+                            server.subscribe(this);
+                            server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
                             break;
                         }else {
                             sendMsg("Указан неверный логин/пароль");
@@ -52,10 +63,15 @@ public class ClientHandler {
                     System.out.println("Сообщение от клиента: " + msg + "\n");
                     if (msg.startsWith("/")){
                         if (msg.equals("/end")){
-                            server.broadcastMsg(nickName + " " + "вышел из чата" + "\n");
+                            server.broadcastMsg(nickName + " " + "вышел из чата" + "\n", true);
                             sendMsg("end_confirm");
                             break;
                         }
+                        String nick = msg.split(" ")[1];
+                        if (msg.equals("/change_nick " + nick)){
+                            server.changeNick(nickName, nick);
+                        }
+
                         String temp = msg.split(" ")[1];
                         if (msg.startsWith("/w " + temp)) {
                             String name = msg.split(" ")[1];
@@ -68,7 +84,7 @@ public class ClientHandler {
 
 
                     }else {
-                        server.broadcastMsg(nickName + ": " + msg);
+                        server.broadcastMsg(nickName + ": " + msg, true);
                     }
                 }
             }catch (IOException e){
@@ -87,8 +103,6 @@ public class ClientHandler {
             e.printStackTrace();
         }
     }
-
-
 
 
     public void close(){
@@ -118,4 +132,3 @@ public class ClientHandler {
     }
 
 }
-

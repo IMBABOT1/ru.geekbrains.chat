@@ -33,18 +33,39 @@ public class Server {
         }
     }
 
-    public void broadcastMsg(String msg) {
-        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        msg = String.format("[%s]%s", LocalDateTime.now().format(DTF), msg);
+    public void broadcastMsg(String msg, boolean withDateTime) {
+        if (withDateTime) {
+            msg = String.format("[%s]%s", LocalDateTime.now().format(DTF), msg);
+        }
         for (ClientHandler o : clients) {
             o.sendMsg(msg);
         }
+    }
+
+
+    public void broadcastClientsList() {
+        StringBuilder sb = new StringBuilder("/clients_list ");
+        for (ClientHandler o : clients) {
+            sb.append(o.getNickName()).append(" ");
+        }
+        sb.setLength(sb.length() - 1);
+        String out = sb.toString();
+        broadcastMsg(out, false);
     }
 
     public void unicastMesage(String msg, String name){
         for (ClientHandler o : clients){
             if (o.getNickName().equals(name)){
                 o.sendMsg(msg);
+            }
+        }
+    }
+
+    public void changeNick(String oldNick, String nick){
+        for (ClientHandler o : clients){
+            if (o.getNickName().equals(oldNick)){
+                System.out.println(1);
+                o.setNickName(nick);
             }
         }
     }
@@ -62,10 +83,12 @@ public class Server {
 
     public synchronized void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
+        broadcastClientsList();
     }
 
     public synchronized void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
+        broadcastClientsList();
     }
 
 }
