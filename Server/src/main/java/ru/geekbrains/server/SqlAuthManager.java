@@ -2,7 +2,7 @@ package ru.geekbrains.server;
 
 import java.sql.*;
 
-public class SqlAuthManager implements AuthManager{
+public class SqlAuthManager  {
 
     private static Connection connection;
     private static Statement statement;
@@ -14,7 +14,9 @@ public class SqlAuthManager implements AuthManager{
         statement = connection.createStatement();
     }
 
-    public static void disconnect(){
+
+
+    public static void disconnect() {
         try {
             if (statement != null) {
                 statement.close();
@@ -23,7 +25,7 @@ public class SqlAuthManager implements AuthManager{
             throwables.printStackTrace();
         }
         try {
-            if (connection != null){
+            if (connection != null) {
                 connection.close();
             }
         } catch (SQLException throwables) {
@@ -48,30 +50,40 @@ public class SqlAuthManager implements AuthManager{
 //            while (rs.next()){
 //                System.out.println(rs.getString(1));
 //            }
-             ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like" + " 'login1' " + "AND pass like " + " 'pass1'");
-            while (rs.next()) {
-                System.out.println(rs.getString(1));
-            }
+            getNickNameByLoginAndPasswor("login2", "pass2");
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }finally {
+        } finally {
             disconnect();
         }
     }
 
+    public static String getNickNameByLoginAndPasswor(String login, String password)  {
+        String s = "";
+        try {
+            ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'"+login+"'" +  "AND pass like " + "'"+password+"'");
+            while (rs.next()){
+                s = (rs.getString(1));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        System.out.println(s);
+        return s;
+    }
 
 
 
-        private static void fillTableExample() throws SQLException {
+    private static void fillTableExample() throws SQLException {
         connection.setAutoCommit(false);
         prepareStatement();
         for (int i = 1; i < 10000; i++) {
             ps.setString(1, "login" + i);
             ps.setString(2, "pass" + i);
-            ps.setString(3,"user" + i);
+            ps.setString(3, "user" + i);
             ps.executeUpdate();
         }
         connection.commit();
@@ -96,20 +108,23 @@ public class SqlAuthManager implements AuthManager{
     private static void insertInto() throws SQLException {
         statement.executeUpdate("INSERT INTO users (login, pass, nickname) VALUES ('login4', 'pass4', 'nickname4')");
     }
+}
 
-    @Override
-    public String getNickNameByLoginAndPassword(String login, String password)  {
-//       try {
-//           ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " +  login + "AND pass like " + password);
-//           while (rs.next()){
-//               System.out.println(rs.getString(1));
-//           }
+//    @Override
+//    public String getNickNameByLoginAndPassword(String login, String password)  {
+//       String s = "";
+//        try {
+//             ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'"+login+"'" +  "AND pass like " + "'"+password+"'");
+//             while (rs.next()){
+//                 s = rs.getCursorName();
+//                 System.out.println(s);
+//             }
 //       }catch (SQLException e){
 //           e.printStackTrace();
 //       }
-
-        return "null";
-    }
-}
+//
+//        return s;
+//    }
+//}
 
 
