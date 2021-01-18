@@ -100,7 +100,7 @@ public class SqlAuthManager implements AuthManager  {
     }
 
     private static void update() throws SQLException {
-        statement.executeUpdate("UPDATE users SET nickname = nick WHERE nickname like nickname");
+        statement.executeUpdate("UPDATE users SET score = 100 WHERE id>0");
     }
 
     private static void insertInto() throws SQLException {
@@ -126,4 +126,3 @@ public class SqlAuthManager implements AuthManager  {
         return s;
     }
 }
-
