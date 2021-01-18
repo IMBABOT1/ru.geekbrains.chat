@@ -43,6 +43,7 @@ public class ClientHandler {
                     System.out.println("Сообщение от клиента: " + msg + "\n");
                     if (msg.startsWith("/auth ")) {
                         String[] token = msg.split(" ", 3);
+                        System.out.println(token[2]);
                         String nickFromAuthManager = server.getAuthManager().getNickNameByLoginAndPassword(token[1], token[2]);
                         if (nickFromAuthManager != null) {
                             if (server.isNickBusy(nickFromAuthManager)){
@@ -70,7 +71,7 @@ public class ClientHandler {
                         }
                         String nick = msg.split(" ")[1];
                         if (msg.equals("/change_nick " + nick)){
-                            server.changeNick(nickName, nick);
+                            server.getAuthManager().changeNickname(nickName, nick);
                         }
 
                         String temp = msg.split(" ")[1];
