@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Locale;
 
 public class ClientHandler {
@@ -87,7 +88,7 @@ public class ClientHandler {
                         server.broadcastMsg(nickName + ": " + msg, true);
                     }
                 }
-            }catch (IOException e){
+            }catch (IOException | SQLException e){
                 e.printStackTrace();
             }finally {
                 close();
