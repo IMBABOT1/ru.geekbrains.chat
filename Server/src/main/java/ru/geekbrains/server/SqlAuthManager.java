@@ -36,29 +36,7 @@ public class SqlAuthManager implements AuthManager  {
         ps = connection.prepareStatement("INSERT INTO users (login, pass, nickname) VALUES (?,?,?)");
     }
 
-    public static void main(String[] args) {
-        try {
-            connect();
-            //insertInto();
-            // update();
-            // delete();
-            //dropTable();
-            //  createTable();
-            // fillTableExample();
-//          ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like 'login1' AND pass like 'pass1'");
-//            while (rs.next()){
-//                System.out.println(rs.getString(1));
-//            }
 
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally {
-            disconnect();
-        }
-    }
 
 //    public static String getNickNameByLoginAndPasswor(String login, String password) {
 ////        String s = "";
@@ -125,5 +103,21 @@ public class SqlAuthManager implements AuthManager  {
         }
         return s;
     }
-}
 
+    @Override
+    public void changeNickname(String oldNick, String newNick) {
+        try {
+            connect();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
+
+            System.out.println(statement.executeUpdate("UPDATE users SET nickname = " + "'"+ newNick + "'" + "WHERE nickname = " + "'" + oldNick + "'"));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+}
