@@ -32,58 +32,8 @@ public class SqlAuthManager implements AuthManager  {
         }
     }
 
-    public static void prepareStatement() throws SQLException {
-        ps = connection.prepareStatement("INSERT INTO users (login, pass, nickname) VALUES (?,?,?)");
-    }
 
 
-
-//    public static String getNickNameByLoginAndPasswor(String login, String password) {
-////        String s = "";
-////        try {
-////            ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'" + login + "'" + "AND pass like " + "'" + password + "'");
-////            while (rs.next()) {
-////                s = (rs.getString(1));
-////            }
-////        } catch (SQLException e) {
-////            e.printStackTrace();
-////        }
-////        System.out.println(s);
-////        return s;
-////    }
-
-
-    private static void fillTableExample() throws SQLException {
-        connection.setAutoCommit(false);
-        prepareStatement();
-        for (int i = 1; i < 10000; i++) {
-            ps.setString(1, "login" + i);
-            ps.setString(2, "pass" + i);
-            ps.setString(3, "user" + i);
-            ps.executeUpdate();
-        }
-        connection.commit();
-    }
-
-    private static void createTable() throws SQLException {
-        statement.executeUpdate("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, pass TEXT, nickname TEXT, score TEXT);");
-    }
-
-    private static void dropTable() throws SQLException {
-        statement.executeUpdate("DROP TABLE IF EXISTS users");
-    }
-
-    private static void delete() throws SQLException {
-        statement.executeUpdate("DELETE FROM users WHERE id = 4;");
-    }
-
-    private static void update() throws SQLException {
-        statement.executeUpdate("UPDATE users SET score = 100 WHERE id>0");
-    }
-
-    private static void insertInto() throws SQLException {
-        statement.executeUpdate("INSERT INTO users (login, pass, nickname) VALUES ('login4', 'pass4', 'nickname4')");
-    }
 
     @Override
     public String getNickNameByLoginAndPassword(String login, String password) throws SQLException {
@@ -100,6 +50,8 @@ public class SqlAuthManager implements AuthManager  {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            disconnect();
         }
         return s;
     }
@@ -115,9 +67,11 @@ public class SqlAuthManager implements AuthManager  {
         }
         try {
 
-            System.out.println(statement.executeUpdate("UPDATE users SET nickname = " + "'"+ newNick + "'" + "WHERE nickname = " + "'" + oldNick + "'"));
+            statement.executeUpdate("UPDATE users SET nickname = " + "'"+ newNick + "'" + "WHERE nickname = " + "'" + oldNick + "'");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
+            disconnect();
         }
     }
 }
