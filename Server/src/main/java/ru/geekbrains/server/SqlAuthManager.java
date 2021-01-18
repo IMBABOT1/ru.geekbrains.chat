@@ -2,7 +2,7 @@ package ru.geekbrains.server;
 
 import java.sql.*;
 
-public class SqlAuthManager  {
+public class SqlAuthManager implements AuthManager  {
 
     private static Connection connection;
     private static Statement statement;
@@ -13,7 +13,6 @@ public class SqlAuthManager  {
         connection = DriverManager.getConnection("jdbc:sqlite:dbmain.db");
         statement = connection.createStatement();
     }
-
 
 
     public static void disconnect() {
@@ -50,7 +49,7 @@ public class SqlAuthManager  {
 //            while (rs.next()){
 //                System.out.println(rs.getString(1));
 //            }
-            getNickNameByLoginAndPasswor("login2", "pass2");
+
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -61,20 +60,19 @@ public class SqlAuthManager  {
         }
     }
 
-    public static String getNickNameByLoginAndPasswor(String login, String password)  {
-        String s = "";
-        try {
-            ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'"+login+"'" +  "AND pass like " + "'"+password+"'");
-            while (rs.next()){
-                s = (rs.getString(1));
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        System.out.println(s);
-        return s;
-    }
-
+//    public static String getNickNameByLoginAndPasswor(String login, String password) {
+////        String s = "";
+////        try {
+////            ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'" + login + "'" + "AND pass like " + "'" + password + "'");
+////            while (rs.next()) {
+////                s = (rs.getString(1));
+////            }
+////        } catch (SQLException e) {
+////            e.printStackTrace();
+////        }
+////        System.out.println(s);
+////        return s;
+////    }
 
 
     private static void fillTableExample() throws SQLException {
@@ -108,23 +106,24 @@ public class SqlAuthManager  {
     private static void insertInto() throws SQLException {
         statement.executeUpdate("INSERT INTO users (login, pass, nickname) VALUES ('login4', 'pass4', 'nickname4')");
     }
+
+    @Override
+    public String getNickNameByLoginAndPassword(String login, String password) throws SQLException {
+        try {
+            connect();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        String s = "";
+        try {
+            ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'" + login + "'" + "AND pass like " + "'" + password + "'");
+            while (rs.next()) {
+                s = (rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
 }
-
-//    @Override
-//    public String getNickNameByLoginAndPassword(String login, String password)  {
-//       String s = "";
-//        try {
-//             ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'"+login+"'" +  "AND pass like " + "'"+password+"'");
-//             while (rs.next()){
-//                 s = rs.getCursorName();
-//                 System.out.println(s);
-//             }
-//       }catch (SQLException e){
-//           e.printStackTrace();
-//       }
-//
-//        return s;
-//    }
-//}
-
 

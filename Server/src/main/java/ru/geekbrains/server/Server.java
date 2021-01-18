@@ -20,7 +20,7 @@ public class Server {
 
     public Server(int port) {
         clients = new ArrayList<>();
-        authManager = new BasicAuthManager();
+        authManager = new SqlAuthManager();
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server start on port: " + port + " waiting for clients: ");
             while (true) {
