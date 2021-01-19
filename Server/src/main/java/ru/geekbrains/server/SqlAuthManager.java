@@ -17,7 +17,7 @@ public class SqlAuthManager implements AuthManager  {
 
 
     @Override
-    public void disconnect()
+    public void disconnect(){
         try {
             if (statement != null) {
                 statement.close();
