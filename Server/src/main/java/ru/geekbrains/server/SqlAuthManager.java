@@ -8,6 +8,7 @@ public class SqlAuthManager implements AuthManager  {
     private static Statement statement;
     public static PreparedStatement ps;
 
+
     @Override
     public void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");

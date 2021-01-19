@@ -8,14 +8,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import ru.geekbrains.server.Server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.ResourceBundle;
+
+
+
 
 public class Controller implements Initializable {
     @FXML
@@ -36,6 +39,8 @@ public class Controller implements Initializable {
     private Network network;
     private boolean authenticated;
     private String nickname;
+
+
 
 
     public void setAuthenticated(boolean authenticated) {
@@ -102,6 +107,7 @@ public class Controller implements Initializable {
                                 }
                             }else {
                                 textArea.appendText(msg + "\n");
+
                             }
                         }
                     }catch (IOException e){
@@ -126,6 +132,8 @@ public class Controller implements Initializable {
             });
         }
     }
+
+
 
 
     public void sendMsg(ActionEvent actionEvent) {

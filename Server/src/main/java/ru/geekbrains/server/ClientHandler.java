@@ -1,9 +1,15 @@
 package ru.geekbrains.server;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class ClientHandler {
@@ -13,6 +19,7 @@ public class ClientHandler {
     private DataOutputStream out;
     private Server server;
     private Log log;
+    private List<String> list;
 
 
     public void setNickName(String nickName) {
@@ -32,6 +39,7 @@ public class ClientHandler {
         this.socket = socket;
         this.in = new DataInputStream(socket.getInputStream());
         this.out = new DataOutputStream(socket.getOutputStream());
+        this.list = new ArrayList<>();
         new Thread(()->{
             try {
                 while (true) {
@@ -50,6 +58,13 @@ public class ClientHandler {
                             sendMsg("/authok " + nickName);
                             server.subscribe(this);
                             server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
+
+                            server.readLog();
+                            server.writeLog1();
+                            server.writeLog2();
+                            server.writeLog3();
+//                            server.writeLog4();
+
                             break;
                         }else {
                             sendMsg("Указан неверный логин/пароль");
@@ -85,6 +100,7 @@ public class ClientHandler {
                     }else {
                         server.broadcastMsg(nickName + ": " + msg, true);
                         log.read(msg);
+
                     }
                 }
             }catch (IOException | SQLException e){
