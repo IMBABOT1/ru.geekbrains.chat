@@ -39,9 +39,8 @@ public class ClientHandler {
                     System.out.println("Сообщение от клиента: " + msg + "\n");
                     if (msg.startsWith("/auth ")) {
                         String[] token = msg.split(" ", 3);
-                        System.out.println(token[2]);
-                        this.log = new Log(new File(token[1] + "." + "txt"));
                         String nickFromAuthManager = server.getAuthManager().getNickNameByLoginAndPassword(token[1], token[2]);
+                        this.log = new Log(new File("history_" + nickFromAuthManager + "." + "txt"));
                         if (nickFromAuthManager != null) {
                             if (server.isNickBusy(nickFromAuthManager)){
                                 sendMsg("Данный пользователь уже в чате");
