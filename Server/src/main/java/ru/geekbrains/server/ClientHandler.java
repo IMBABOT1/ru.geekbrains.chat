@@ -63,7 +63,7 @@ public class ClientHandler {
                             server.writeLog1();
                             server.writeLog2();
                             server.writeLog3();
-//                            server.writeLog4();
+                            server.writeLog4();
 
                             break;
                         }else {

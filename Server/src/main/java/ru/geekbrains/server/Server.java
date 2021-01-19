@@ -76,6 +76,7 @@ public class Server {
             @Override
             public void run() {
                 for (int i = result.size() - 1; i >= 150; i--) {
+                    System.out.println(result.size());
                     for (ClientHandler o : clients) {
                         try {
                             Thread.sleep(10);
@@ -127,7 +128,7 @@ public class Server {
         Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 148; i >= 110; i--) {
+                for (int i = 129; i >= 110; i--) {
                     for (ClientHandler o : clients) {
                         try {
                             Thread.sleep(10);
@@ -148,30 +149,33 @@ public class Server {
             e.printStackTrace();
         }
     }
-//    public synchronized void writeLog4(){
-//        Thread t3 = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (int i = result.size() - 1; i >= 90; i--) {
-//                    for (ClientHandler o : clients) {
-//                        try {
-//                            Thread.sleep(10);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        o.sendMsg(result.get(i));
-//
-//                    }
-//                }
-//            }
-//        });
-//        t3.start();
-//        try {
-//            t3.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public synchronized void writeLog4(){
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 109; i >= 83; i--) {
+                    for (ClientHandler o : clients) {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        o.sendMsg(result.get(i));
+
+                    }
+                }
+            }
+        });
+        t3.start();
+        try {
+            t3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
