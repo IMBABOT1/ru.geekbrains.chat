@@ -72,6 +72,7 @@ public class ClientHandler {
                         String nick = msg.split(" ")[1];
                         if (msg.equals("/change_nick " + nick)){
                             server.getAuthManager().changeNickname(nickName, nick);
+                            server.changeNick(nickName, nick);
                         }
 
                         String temp = msg.split(" ")[1];

@@ -38,11 +38,6 @@ public class SqlAuthManager implements AuthManager  {
 
     @Override
     public String getNickNameByLoginAndPassword(String login, String password) throws SQLException {
-        try {
-            connect();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         String s = "";
         try {
             ResultSet rs = statement.executeQuery("SELECT NICKNAME FROM users WHERE login like " + "'" + login + "'" + "AND pass like " + "'" + password + "'");
@@ -51,8 +46,6 @@ public class SqlAuthManager implements AuthManager  {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            disconnect();
         }
         return s;
     }
@@ -60,19 +53,9 @@ public class SqlAuthManager implements AuthManager  {
     @Override
     public void changeNickname(String oldNick, String newNick) {
         try {
-            connect();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        try {
-
             statement.executeUpdate("UPDATE users SET nickname = " + "'"+ newNick + "'" + "WHERE nickname = " + "'" + oldNick + "'");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }finally {
-            disconnect();
         }
     }
 }
