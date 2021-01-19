@@ -113,7 +113,7 @@ public class Controller implements Initializable {
                         network.close();
                         setAuthenticated(false);
                         nickname = null;
-                        // textArea.clear();
+                       // textArea.clear();
                     }
                 }
             });
