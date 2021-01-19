@@ -1,9 +1,8 @@
 package ru.geekbrains.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Locale;
 
@@ -20,10 +19,6 @@ public class ClientHandler {
     }
 
     private String nickName;
-
-
-
-    private String newNick;
 
 
     public String getNickName() {
@@ -88,6 +83,9 @@ public class ClientHandler {
 
                     }else {
                         server.broadcastMsg(nickName + ": " + msg, true);
+                        FileWriter fw = new FileWriter("file.txt",true); //the true will append the new data
+                        fw.write(msg + "\n");//appends the string to the file
+                        fw.close();
                     }
                 }
             }catch (IOException | SQLException e){
@@ -99,6 +97,8 @@ public class ClientHandler {
     }
 
 
+
+
     public void sendMsg(String msg){
         try {
             out.writeUTF(msg);
@@ -106,6 +106,7 @@ public class ClientHandler {
             e.printStackTrace();
         }
     }
+
 
 
     public void close(){
