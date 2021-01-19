@@ -8,14 +8,16 @@ public class SqlAuthManager implements AuthManager  {
     private static Statement statement;
     public static PreparedStatement ps;
 
-    public static void connect() throws ClassNotFoundException, SQLException {
+    @Override
+    public void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:dbmain.db");
         statement = connection.createStatement();
     }
 
 
-    public static void disconnect() {
+    @Override
+    public void disconnect() {
         try {
             if (statement != null) {
                 statement.close();
@@ -31,7 +33,6 @@ public class SqlAuthManager implements AuthManager  {
             throwables.printStackTrace();
         }
     }
-
 
 
 
