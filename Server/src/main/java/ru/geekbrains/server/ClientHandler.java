@@ -12,6 +12,7 @@ public class ClientHandler {
     private DataInputStream in;
     private DataOutputStream out;
     private Server server;
+    private Log log;
 
 
     public void setNickName(String nickName) {
@@ -39,6 +40,7 @@ public class ClientHandler {
                     if (msg.startsWith("/auth ")) {
                         String[] token = msg.split(" ", 3);
                         System.out.println(token[2]);
+                        this.log = new Log(new File(token[1] + "." + "txt"));
                         String nickFromAuthManager = server.getAuthManager().getNickNameByLoginAndPassword(token[1], token[2]);
                         if (nickFromAuthManager != null) {
                             if (server.isNickBusy(nickFromAuthManager)){
@@ -83,9 +85,7 @@ public class ClientHandler {
 
                     }else {
                         server.broadcastMsg(nickName + ": " + msg, true);
-                        FileWriter fw = new FileWriter("file.txt",true); //the true will append the new data
-                        fw.write(msg + "\n");//appends the string to the file
-                        fw.close();
+                        log.read(msg);
                     }
                 }
             }catch (IOException | SQLException e){
