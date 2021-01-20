@@ -77,6 +77,7 @@ public class Server {
         return result;
     }
 
+
     public synchronized void writeLog1(){
         position = 1;
         Thread t = new Thread(new Runnable() {
@@ -85,7 +86,7 @@ public class Server {
                 for (int i = result.size() - 1  - caret ; i <= (result.size()-1); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(15);
+                            Thread.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -101,7 +102,10 @@ public class Server {
             t.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }finally {
+
         }
+
     }
 
     public synchronized void writeLog2(){
@@ -111,7 +115,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 2));  i <= (result.size() - 1  - caret); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(15);
+                            Thread.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -127,6 +131,8 @@ public class Server {
             t1.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }finally {
+
         }
     }
 
@@ -137,7 +143,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 3));  i <= (result.size() - 1  - (caret * 2)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(15);
+                            Thread.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -156,32 +162,33 @@ public class Server {
         }
     }
 
-    public synchronized void writeLog4(){
-        Thread t3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = (result.size() - 1  - (caret * 4));  i <= (result.size() - 1  - (caret * 3)); i++) {
-                    for (ClientHandler o : clients) {
-                        try {
-                            Thread.sleep(15);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+    public synchronized void writeLog4() {
+            Thread t3 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = (result.size() - 1 - (caret * 4)); i <= (result.size() - 1 - (caret * 3)); i++) {
+                        for (ClientHandler o : clients) {
+                            try {
+                                Thread.sleep(10);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            o.sendMsg(result.get(i));
+
                         }
-
-                        o.sendMsg(result.get(i));
-
                     }
                 }
+            });
+            t3.start();
+            try {
+                t3.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-        t3.start();
-        try {
-            t3.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
-    }
+
 
 
     public synchronized void writeLog5(){
@@ -191,7 +198,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 5));  i <= (result.size() - 1  - (caret * 4)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(15);
+                            Thread.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
