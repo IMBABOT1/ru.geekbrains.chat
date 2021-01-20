@@ -188,34 +188,44 @@ public class Server {
             }
         }
 
-
-
-
-    public synchronized void writeLog5(){
-        Thread t3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = (result.size() - 1  - (caret * 5));  i <= (result.size() - 1  - (caret * 4)); i++) {
-                    for (ClientHandler o : clients) {
-                        try {
-                            Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        o.sendMsg(result.get(i));
-
-                    }
-                }
+        public void method(){
+            Thread thread3
+            Thread thread1 = new Thread(new MyThread(4, 3));
+            Thread thread = new Thread(new MyThread(5, 4));
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-        t3.start();
-        try {
-            t3.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            thread.start();
         }
-    }
+
+
+//    public synchronized void writeLog5(){
+//        Thread t3 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = (result.size() - 1  - (caret * 5));  i <= (result.size() - 1  - (caret * 4)); i++) {
+//                    for (ClientHandler o : clients) {
+//                        try {
+//                            Thread.sleep(10);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        o.sendMsg(result.get(i));
+//
+//                    }
+//                }
+//            }
+//        });
+//        t3.start();
+//        try {
+//            t3.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
