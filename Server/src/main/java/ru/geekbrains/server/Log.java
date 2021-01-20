@@ -18,7 +18,6 @@ public class Log  {
         try {
             fw = new FileWriter(file, true);
             fw.write(  read + "\n");
-            System.out.println(file.getTotalSpace());
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -30,21 +29,5 @@ public class Log  {
         }
     }
 
-    public String log(String read){
-        try {
-            fw = new FileWriter(file, true);
-            fw.write(  read + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                fw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return read;
-    }
 }
 

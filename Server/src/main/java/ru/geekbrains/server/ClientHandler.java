@@ -60,10 +60,15 @@ public class ClientHandler {
                             server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
 
                             server.readLog();
-                            server.writeLog1();
-                            server.writeLog2();
-                            server.writeLog3();
+                            server.writeLog5();
                             server.writeLog4();
+                            server.writeLog3();
+                            server.writeLog2();
+                            server.writeLog1();
+
+
+                            ;
+
 
                             break;
                         }else {

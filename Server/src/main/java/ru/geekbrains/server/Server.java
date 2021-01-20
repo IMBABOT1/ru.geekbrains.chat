@@ -24,9 +24,11 @@ public class Server {
     }
 
     private AuthManager authManager;
+    private int caret;
     private final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Server(int port) {
+        caret = 20;
         clients = new ArrayList<>();
         result = new ArrayList<>();
         authManager = new SqlAuthManager();
@@ -75,8 +77,7 @@ public class Server {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = result.size() - 1; i >= 150; i--) {
-                    System.out.println(result.size());
+                for (int i = result.size() - 1  - caret ; i <= (result.size()-1); i++) {
                     for (ClientHandler o : clients) {
                         try {
                             Thread.sleep(10);
@@ -102,7 +103,7 @@ public class Server {
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 149; i >= 130; i--) {
+                for (int i = (result.size() - 1  - (caret * 2));  i <= (result.size() - 1  - caret); i++) {
                     for (ClientHandler o : clients) {
                         try {
                             Thread.sleep(10);
@@ -128,10 +129,10 @@ public class Server {
         Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 129; i >= 110; i--) {
+                for (int i = (result.size() - 1  - (caret * 3));  i <= (result.size() - 1  - (caret * 2)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -154,10 +155,10 @@ public class Server {
         Thread t3 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 109; i >= 83; i--) {
+                for (int i = (result.size() - 1  - (caret * 4));  i <= (result.size() - 1  - (caret * 3)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -175,6 +176,34 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+
+    public synchronized void writeLog5(){
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = (result.size() - 1  - (caret * 5));  i <= (result.size() - 1  - (caret * 4)); i++) {
+                    for (ClientHandler o : clients) {
+                        try {
+                            Thread.sleep(15);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        o.sendMsg(result.get(i));
+
+                    }
+                }
+            }
+        });
+        t3.start();
+        try {
+            t3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
