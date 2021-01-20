@@ -60,7 +60,7 @@ public class ClientHandler {
                             server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
 
                             server.readLog();
-                            server.method();
+                            server.writeLog5();
                             server.writeLog4();
                             server.writeLog3();
                             server.writeLog2();
