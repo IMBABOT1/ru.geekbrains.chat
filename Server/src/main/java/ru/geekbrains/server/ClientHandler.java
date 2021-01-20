@@ -64,12 +64,6 @@ public class ClientHandler {
                                 ClientHandler.this.sendMsg("/authok " + nickName);
                                 server.subscribe(ClientHandler.this);
                                 server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
-                                server.readLog();
-                                server.writeLog5();
-                                server.writeLog4();
-                                server.writeLog3();
-                                server.writeLog2();
-                                server.writeLog1();
                                 break;
                             } else {
                                 ClientHandler.this.sendMsg("Указан неверный логин/пароль");
