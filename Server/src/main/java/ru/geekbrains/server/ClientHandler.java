@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler {
 
@@ -40,80 +43,76 @@ public class ClientHandler {
         this.in = new DataInputStream(socket.getInputStream());
         this.out = new DataOutputStream(socket.getOutputStream());
         this.list = new ArrayList<>();
-        new Thread(()->{
-            try {
-                while (true) {
-                    String msg = in.readUTF();
-                    System.out.println("Сообщение от клиента: " + msg + "\n");
-                    if (msg.startsWith("/auth ")) {
-                        String[] token = msg.split(" ", 3);
-                        String nickFromAuthManager = server.getAuthManager().getNickNameByLoginAndPassword(token[1], token[2]);
-                        this.log = new Log(new File("history_" + nickFromAuthManager + "." + "txt"));
-                        if (nickFromAuthManager != null) {
-                            if (server.isNickBusy(nickFromAuthManager)){
-                                sendMsg("Данный пользователь уже в чате");
-                                continue;
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        String msg = in.readUTF();
+                        System.out.println("Сообщение от клиента: " + msg + "\n");
+                        if (msg.startsWith("/auth ")) {
+                            String[] token = msg.split(" ", 3);
+                            String nickFromAuthManager = server.getAuthManager().getNickNameByLoginAndPassword(token[1], token[2]);
+                            ClientHandler.this.log = new Log(new File("history_" + token[1] + "." + "txt"));
+                            if (nickFromAuthManager != null) {
+                                if (server.isNickBusy(nickFromAuthManager)) {
+                                    ClientHandler.this.sendMsg("Данный пользователь уже в чате");
+                                    continue;
+                                }
+                                nickName = nickFromAuthManager;
+                                ClientHandler.this.sendMsg("/authok " + nickName);
+                                server.subscribe(ClientHandler.this);
+                                server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
+                                server.readLog();
+                                server.writeLog5();
+                                server.writeLog4();
+                                server.writeLog3();
+                                server.writeLog2();
+                                server.writeLog1();
+                                break;
+                            } else {
+                                ClientHandler.this.sendMsg("Указан неверный логин/пароль");
                             }
-                            nickName = nickFromAuthManager;
-                            sendMsg("/authok " + nickName);
-                            server.subscribe(this);
-                            server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
-
-                            server.readLog();
-                            server.writeLog5();
-                            server.writeLog4();
-                            server.writeLog3();
-                            server.writeLog2();
-                            server.writeLog1();
-
-
-                            ;
-
-
-                            break;
-                        }else {
-                            sendMsg("Указан неверный логин/пароль");
                         }
                     }
-                }
-                while (true){
-                    String msg = in.readUTF();
-                    System.out.println("Сообщение от клиента: " + msg + "\n");
-                    if (msg.startsWith("/")){
-                        if (msg.equals("/end")){
-                            server.broadcastMsg(nickName + " " + "вышел из чата" + "\n", true);
-                            sendMsg("end_confirm");
-                            break;
+                    while (true) {
+                        String msg = in.readUTF();
+                        System.out.println("Сообщение от клиента: " + msg + "\n");
+                        if (msg.startsWith("/")) {
+                            if (msg.equals("/end")) {
+                                server.broadcastMsg(nickName + " " + "вышел из чата" + "\n", true);
+                                ClientHandler.this.sendMsg("end_confirm");
+                                break;
+                            }
+                            String nick = msg.split(" ")[1];
+                            if (msg.equals("/change_nick " + nick)) {
+                                server.getAuthManager().changeNickname(nickName, nick);
+                                server.changeNick(nickName, nick);
+                            }
+
+                            String temp = msg.split(" ")[1];
+                            if (msg.startsWith("/w " + temp)) {
+                                String name = msg.split(" ")[1];
+                                msg = msg.replaceAll("/w", "");
+                                msg = msg.replaceAll(name, "");
+                                msg = msg.replaceAll("  ", " ");
+                                server.unicastMesage(nickName + " " + "wisp:" + msg, name);
+                                server.unicastMesage(nickName + "" + " wisp to " + name + ":" + " " + msg, nickName);
+                            }
+                        } else {
+                            server.broadcastMsg(nickName + ": " + msg, true);
+                            log.read(msg);
                         }
-                        String nick = msg.split(" ")[1];
-                        if (msg.equals("/change_nick " + nick)){
-                            server.getAuthManager().changeNickname(nickName, nick);
-                            server.changeNick(nickName, nick);
-                        }
-
-                        String temp = msg.split(" ")[1];
-                        if (msg.startsWith("/w " + temp)) {
-                            String name = msg.split(" ")[1];
-                            msg = msg.replaceAll("/w", "");
-                            msg = msg.replaceAll(name, "");
-                            msg = msg.replaceAll("  ", " ");
-                            server.unicastMesage(nickName + " " + "wisp:" + msg, name);
-                            server.unicastMesage(nickName +  "" + " wisp to " + name + ":" + " " + msg,  nickName);
-                        }
-
-
-                    }else {
-                        server.broadcastMsg(nickName + ": " + msg, true);
-                        log.read(msg);
-
                     }
+                } catch (IOException | SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    ClientHandler.this.close();
+                    executorService.shutdown();
                 }
-            }catch (IOException | SQLException e){
-                e.printStackTrace();
-            }finally {
-                close();
             }
-        }).start();
+        });
     }
 
 

@@ -86,7 +86,7 @@ public class Server {
                 for (int i = result.size() - 1  - caret ; i <= (result.size()-1); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -115,7 +115,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 2));  i <= (result.size() - 1  - caret); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -143,7 +143,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 3));  i <= (result.size() - 1  - (caret * 2)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -169,7 +169,7 @@ public class Server {
                 for (int i = (result.size() - 1 - (caret * 4)); i <= (result.size() - 1 - (caret * 3)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -198,7 +198,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 5));  i <= (result.size() - 1  - (caret * 4)); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
