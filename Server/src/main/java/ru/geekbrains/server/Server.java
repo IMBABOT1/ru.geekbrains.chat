@@ -26,8 +26,12 @@ public class Server {
     private AuthManager authManager;
     private int caret;
     private final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private int position;
+    private int endPosition;
 
     public Server(int port) {
+        endPosition = 0;
+        position = 0;
         caret = 20;
         clients = new ArrayList<>();
         result = new ArrayList<>();
@@ -74,13 +78,14 @@ public class Server {
     }
 
     public synchronized void writeLog1(){
+        position = 1;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int i = result.size() - 1  - caret ; i <= (result.size()-1); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -106,7 +111,7 @@ public class Server {
                 for (int i = (result.size() - 1  - (caret * 2));  i <= (result.size() - 1  - caret); i++) {
                     for (ClientHandler o : clients) {
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(15);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -175,6 +180,7 @@ public class Server {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
 
