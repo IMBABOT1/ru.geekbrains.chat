@@ -56,6 +56,7 @@ public class Controller implements Initializable {
         this.authenticated = authenticated;
         loginBox.setVisible(!authenticated);
         loginBox.setManaged(!authenticated);
+        textArea.setVisible(authenticated);
         msgField.setVisible(authenticated);
         msgField.setManaged(authenticated);
         clientsList.setVisible(authenticated);
@@ -64,6 +65,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        clients = new ArrayList<>();
+        result = new ArrayList<>();
         setAuthenticated(false);
         clientsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -76,16 +79,11 @@ public class Controller implements Initializable {
                 }
             }
         });
-
-        for (int i = 0; i < 50 ; i++) {
-            textArea.appendText("\n");
-        }
-
+        readLog();
+        textArea.appendText(writeLog() + "\n");
     }
 
     public void tryToConnect(){
-        clients = new ArrayList<>();
-        result = new ArrayList<>();
         try {
             if (network != null && network.isConnected()){
                 return;
@@ -99,11 +97,8 @@ public class Controller implements Initializable {
                         while (true) {
                             String msg = network.readMsg();
                             if (msg.startsWith("/authok ")){
-
                                 nickname = msg.split(" ")[1];
                                 setAuthenticated(true);
-                                readLog();
-                                textArea.appendText(writeLog());
                                 break;
                             }
                             textArea.appendText(msg + "\n");
