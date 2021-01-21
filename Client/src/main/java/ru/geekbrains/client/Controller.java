@@ -124,6 +124,7 @@ public class Controller implements Initializable {
                                     });
                                 }
                             }else {
+                                textArea.appendText("\n");
                                 textArea.appendText(msg + "\n");
                             }
                         }
@@ -136,7 +137,7 @@ public class Controller implements Initializable {
                         network.close();
                         setAuthenticated(false);
                         nickname = null;
-                       // textArea.clear();
+                        // textArea.clear();
                     }
                 }
             });
