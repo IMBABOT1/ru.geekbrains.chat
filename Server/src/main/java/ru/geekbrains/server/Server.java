@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Server {
@@ -24,15 +26,17 @@ public class Server {
     }
 
     private AuthManager authManager;
-    private int caret;
     private final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private int position;
-    private int endPosition;
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    private ExecutorService executorService;
+
 
     public Server(int port) {
-        endPosition = 0;
-        position = 0;
-        caret = 20;
+        executorService = Executors.newCachedThreadPool();
         clients = new ArrayList<>();
         result = new ArrayList<>();
         authManager = new SqlAuthManager();
@@ -54,6 +58,7 @@ public class Server {
             e.printStackTrace();
         } finally {
             authManager.disconnect();
+            executorService.shutdown();
         }
     }
 

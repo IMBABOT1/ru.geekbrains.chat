@@ -43,8 +43,8 @@ public class ClientHandler {
         this.in = new DataInputStream(socket.getInputStream());
         this.out = new DataOutputStream(socket.getOutputStream());
         this.list = new ArrayList<>();
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
-        executorService.execute(new Runnable() {
+
+        server.getExecutorService().execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -103,10 +103,10 @@ public class ClientHandler {
                     e.printStackTrace();
                 } finally {
                     ClientHandler.this.close();
-                    executorService.shutdown();
                 }
             }
         });
+
     }
 
 
