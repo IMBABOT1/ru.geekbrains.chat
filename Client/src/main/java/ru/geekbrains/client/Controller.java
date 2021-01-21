@@ -77,9 +77,10 @@ public class Controller implements Initializable {
             }
         });
 
-        for (int i = 0; i < 100 ; i++) {
+        for (int i = 0; i < 50 ; i++) {
             textArea.appendText("\n");
         }
+
     }
 
     public void tryToConnect(){
@@ -102,7 +103,7 @@ public class Controller implements Initializable {
                                 nickname = msg.split(" ")[1];
                                 setAuthenticated(true);
                                 readLog();
-                                textArea.appendText(writeLog() + "\n");
+                                textArea.appendText(writeLog());
                                 break;
                             }
                             textArea.appendText(msg + "\n");
