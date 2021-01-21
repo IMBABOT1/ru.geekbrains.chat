@@ -76,6 +76,10 @@ public class Controller implements Initializable {
                 }
             }
         });
+
+        for (int i = 0; i < 100 ; i++) {
+            textArea.appendText("\n");
+        }
     }
 
     public void tryToConnect(){
@@ -98,11 +102,7 @@ public class Controller implements Initializable {
                                 nickname = msg.split(" ")[1];
                                 setAuthenticated(true);
                                 readLog();
-                                textArea.setWrapText(true);
-                                for (int i = result.size() - 1; i >= result.size() - 100 ; i--) {
-                                    textArea.appendText(result.get(i) + '\n');
-                                }
-
+                                textArea.appendText(writeLog() + "\n");
                                 break;
                             }
                             textArea.appendText(msg + "\n");
@@ -124,7 +124,6 @@ public class Controller implements Initializable {
                                     });
                                 }
                             }else {
-                                textArea.appendText("\n");
                                 textArea.appendText(msg + "\n");
                             }
                         }
