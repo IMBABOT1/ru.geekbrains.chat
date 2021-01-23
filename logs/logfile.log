@@ -1,0 +1,10 @@
+INFO  2021-01-23 22:42:35 [main] Server (Server.java:56) - Server start on port: 8189 waiting for clients: 
+INFO  2021-01-23 22:43:06 [main] Server (Server.java:59) - Client connect
+INFO  2021-01-23 22:43:06 [pool-2-thread-1] Server (ClientHandler.java:54) - Сообщение от клиента: /auth login1 pass1
+
+INFO  2021-01-23 22:43:06 [pool-2-thread-1] Server (ClientHandler.java:69) - asdgsa зашел в чат
+
+INFO  2021-01-23 22:44:01 [pool-2-thread-1] Server (ClientHandler.java:79) - Сообщение от клиента: /end
+
+INFO  2021-01-23 22:44:01 [pool-2-thread-1] Server (ClientHandler.java:83) - asdgsa вышел из чата
+
