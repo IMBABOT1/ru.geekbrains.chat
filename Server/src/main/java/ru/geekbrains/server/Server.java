@@ -1,5 +1,6 @@
 package ru.geekbrains.server;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +38,7 @@ public class Server {
 
     private ExecutorService executorService;
 
-    private static final Logger logger = LogManager.getLogger(Server.class);
+    public static final Logger LOGGER = LogManager.getLogger("Server");
 
     public Server(int port) {
         executorService = Executors.newCachedThreadPool();
@@ -52,13 +53,14 @@ public class Server {
             throwables.printStackTrace();
         }
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Server start on port: " + port + " waiting for clients: ");
+           LOGGER.log(Level.valueOf("Info"), "Server start on port: " + port + " waiting for clients: ");
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("Client connect");
+              LOGGER.log(Level.valueOf("Info"),"Client connect" );
                 new ClientHandler(this, socket);
             }
         } catch (IOException e) {
+            LOGGER.throwing(Level.ERROR, e);
             e.printStackTrace();
         } finally {
             authManager.disconnect();

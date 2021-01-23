@@ -17,7 +17,7 @@
 
 
     <Loggers>
-        <Logger name="ru.geekbrains" level="warn" />
+        <Logger name="Server" level="info" />
         <Root level="info">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="FILE"/>

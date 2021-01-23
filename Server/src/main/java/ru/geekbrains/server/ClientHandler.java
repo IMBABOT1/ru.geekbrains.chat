@@ -3,6 +3,7 @@ package ru.geekbrains.server;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import org.apache.logging.log4j.Level;
 
 import java.io.*;
 import java.net.Socket;
@@ -50,7 +51,7 @@ public class ClientHandler {
                 try {
                     while (true) {
                         String msg = in.readUTF();
-                        System.out.println("Сообщение от клиента: " + msg + "\n");
+                       Server.LOGGER.log(Level.valueOf("Info"),"Сообщение от клиента: " + msg + "\n" );
                         if (msg.startsWith("/auth ")) {
                             String[] token = msg.split(" ", 3);
                             String nickFromAuthManager = server.getAuthManager().getNickNameByLoginAndPassword(token[1], token[2]);
@@ -58,29 +59,34 @@ public class ClientHandler {
                             if (nickFromAuthManager != null) {
                                 if (server.isNickBusy(nickFromAuthManager)) {
                                     ClientHandler.this.sendMsg("Данный пользователь уже в чате");
+                                    Server.LOGGER.info("Данный пользователь уже в чате");
                                     continue;
                                 }
                                 nickName = nickFromAuthManager;
                                 ClientHandler.this.sendMsg("/authok " + nickName);
                                 server.subscribe(ClientHandler.this);
                                 server.broadcastMsg(nickName + " " + "зашел в чат" + "\n", true);
+                                Server.LOGGER.info(nickName + " " + "зашел в чат" + "\n");
                                 break;
                             } else {
                                 ClientHandler.this.sendMsg("Указан неверный логин/пароль");
+                                Server.LOGGER.info("Указан неверный логин/пароль");
                             }
                         }
                     }
                     while (true) {
                         String msg = in.readUTF();
-                        System.out.println("Сообщение от клиента: " + msg + "\n");
+                        Server.LOGGER.info("Сообщение от клиента: " + msg + "\n");
                         if (msg.startsWith("/")) {
                             if (msg.equals("/end")) {
                                 server.broadcastMsg(nickName + " " + "вышел из чата" + "\n", true);
+                                Server.LOGGER.info(nickName + " " + "вышел из чата" + "\n");
                                 ClientHandler.this.sendMsg("end_confirm");
                                 break;
                             }
                             String nick = msg.split(" ")[1];
                             if (msg.equals("/change_nick " + nick)) {
+                                Server.LOGGER.info("/change_nick " + nick);
                                 server.getAuthManager().changeNickname(nickName, nick);
                                 server.changeNick(nickName, nick);
                             }
