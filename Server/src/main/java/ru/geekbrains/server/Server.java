@@ -1,5 +1,8 @@
 package ru.geekbrains.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -34,6 +37,7 @@ public class Server {
 
     private ExecutorService executorService;
 
+    private static final Logger logger = LogManager.getLogger(Server.class);
 
     public Server(int port) {
         executorService = Executors.newCachedThreadPool();
